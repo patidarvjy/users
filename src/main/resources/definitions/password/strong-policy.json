@@ -1,0 +1,7 @@
+{
+  "min": 8,
+  "classes":["UPPER_CASE", "LOWER_CASE", "SPECIAL", "NUMBERS", "OTHER"],
+  "dtl": 90,
+  "blockReuse": true,
+  "blockNames": true
+}

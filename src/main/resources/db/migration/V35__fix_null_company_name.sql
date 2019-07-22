@@ -1,0 +1,1 @@
+UPDATE organisations SET name = ' ' WHERE name IS NULL;

@@ -1,0 +1,1 @@
+ALTER TABLE "organisations" ADD COLUMN charge_bee_id varchar(64) DEFAULT '';

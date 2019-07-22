@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<job-scheduling-data xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+                     version="1.8">
+
+    <schedule>
+        <job>
+            <name>test-phase-expire-notification-task-scheduler</name>
+            <group>daily-scheduler-job-group</group>
+
+            <description>Test Phase Expire Notification scheduler</description>
+            <job-class>com.docutools.scheduler.jobs.TestPhaseExpireNotificationTask</job-class>
+            <job-data-map>
+                <entry>
+                    <key>name</key>
+                    <value>test-phase-expire-notification-task-scheduler</value>
+                </entry>
+            </job-data-map>
+        </job>
+
+        <trigger>
+            <cron>
+                <name>test-phase-expire-notification-task-trigger</name>
+                <group>daily-scheduler-trigger-group</group>
+                <job-name>test-phase-expire-notification-task-scheduler</job-name>
+
+                <job-group>daily-scheduler-job-group</job-group>
+                <!-- trigger every day at 12:00 PM -->
+                <cron-expression>0 0 12 * * ?</cron-expression>
+
+            </cron>
+        </trigger>
+    </schedule>
+</job-scheduling-data>

@@ -1,0 +1,1 @@
+ALTER TABLE docutools_users ADD COLUMN save_photos_on_device boolean NOT NULL DEFAULT FALSE;

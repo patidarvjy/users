@@ -1,0 +1,164 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.21.0")
+    }
+}
+
+plugins {
+    id "com.palantir.docker" version "0.21.0"
+    id "org.sonarqube" version "2.6"
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.palantir.docker'
+
+version = 'api-v2'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url "https://repo.spring.io/plugin-release" }
+    maven {
+        url "s3://docu-tools-maven/release"
+        credentials(AwsCredentials) {
+            accessKey project.hasProperty('AWS_ACCESS_KEY') ? AWS_ACCESS_KEY : "${System.env.AWS_ACCESS_KEY}"
+            secretKey project.hasProperty('AWS_SECRET_KEY') ? AWS_SECRET_KEY : "${System.env.AWS_SECRET_KEY}"
+        }
+    }
+}
+
+
+ext {
+    springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
+    lombok = '1.18.2'
+}
+
+dependencies {
+    compile('org.codehaus.groovy:groovy')
+
+    compile 'org.springframework.security:spring-security-core'
+    compile('org.springframework.security.oauth:spring-security-oauth2')
+    compile('org.springframework.security:spring-security-jwt:1.0.8.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-freemarker')
+    compile('org.springframework.boot:spring-boot-starter-hateoas')
+    compile('org.springframework.boot:spring-boot-starter-mail')
+
+    compile('com.docutools:storage-sdk:1.0.51.RELEASE')
+    compile('com.docutools:service-clients:1.0.339.RELEASE')
+    compile('com.docutools:notifications:1.0.26.RELEASE')
+    compile('com.docutools:api-errors:1.2.17-RELEASE')
+    //File encoding api
+    compile 'com.docutools:encoding-service-client:1.0.4.RELEASE'
+
+    // Database Stack
+    compile('org.flywaydb:flyway-core')
+    compile('com.zaxxer:HikariCP')
+    runtime('org.postgresql:postgresql')
+
+    compile('org.jboss.aerogear:aerogear-otp-java:1.0.0')
+    compile('com.google.zxing:javase:3.3.1')
+    compile('com.xlson.groovycsv:groovycsv:1.2')
+
+    compile('org.apache.commons:commons-csv:1.5')
+    compile('com.googlecode.ez-vcard:ez-vcard:0.10.3')
+
+    // Fixing an Issue with Spring Frameowkr 5 Dependencies
+    compile('com.fasterxml.jackson.module:jackson-module-kotlin:2.9.2')
+
+    compile 'org.apache.commons:commons-lang3:3.8'
+
+    compile 'com.sendgrid:sendgrid-java:4.1.2'
+    compile 'org.quartz-scheduler:quartz:2.3.0'
+    compile 'org.quartz-scheduler:quartz-jobs:2.3.0'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.8.0'
+
+    // Required for the Caching Map in DocuToolsTokenEnhancer
+    compile 'com.google.guava:guava:26.0-jre'
+
+    //S3 Storage Wagon
+    compile('com.gkatzioura.maven.cloud:s3-storage-wagon:2.0')
+
+    // Chargebee
+    compile 'com.chargebee:chargebee-java:2.5.9'
+
+    // Amazon SNS
+    compile 'com.amazonaws:aws-java-sdk-sns:1.11.319'
+    compile group: 'com.twilio.sdk', name: 'twilio', version: '7.36.2'
+
+    runtime('javax.xml.bind:jaxb-api')
+    runtime('com.sun.xml.bind:jaxb-core:2.3.0')
+    runtime('com.sun.xml.bind:jaxb-impl:2.3.0')
+    runtime('javax.activation:activation:1.1.1')
+
+
+    // Test Classes
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        //to prevent warnings about multiple versions of android-json
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
+    testCompile('io.rest-assured:rest-assured')
+
+    // JUnit 5
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
+    testCompile("org.junit.jupiter:junit-jupiter-params:5.0.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
+
+    // Enable use of the JUnitPlatform Runner within the IDE
+    testCompile("org.junit.platform:junit-platform-runner:1.0.2")
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10'
+}
+
+// Joint Java / Groovy Compilation
+sourceSets {
+    main {
+        java.srcDirs = []
+        groovy.srcDirs += ["src/main/java"]
+    }
+    test {
+        java.srcDirs = []
+        groovy.srcDirs += ["src/main/java"]
+    }
+}
+
+docker {
+    dependsOn bootJar
+    name "registry.gitlab.com/docu-tools/users:${buildTag()}"
+
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
+}
+
+static String buildTag() {
+    (System.getenv('CI_COMMIT_REF_NAME') ?: 'dev') + '-' + (System.getenv('CI_PIPELINE_IID') ?: 'latest')
+}
+
+test {
+    useJUnitPlatform()
+}

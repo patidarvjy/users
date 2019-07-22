@@ -1,0 +1,140 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Roles",
+		"_postman_id": "36dbab0b-ca41-7e7c-72e3-c75a289ed35b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Privileges",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/privileges",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List Roles in Organisation",
+			"request": {
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/organisations/1/roles?sort=name&sortDirection=DESC",
+					"auth": {},
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"organisations",
+						"1",
+						"roles"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "name",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "sortDirection",
+							"value": "DESC",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List Roles in User's Organisation",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/roles?sort=name&sortDirection=DESC",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Role",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/roles",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"A Really Good Role\",\n\t\"privileges\": [\"ManageTeam\", \"ManagePlanFolders\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update Roles",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/roles/{{roleId}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"A Really Good Role\",\n\t\"privileges\": [\"ManageTeam\", \"ManagePlanFolders\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

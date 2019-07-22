@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://docutools-production.cadt5v7adm8x.eu-central-1.rds.amazonaws.com:5937/users?user=users
+    hikari:
+      maximumPoolSize: 150
+  flyway:
+    enabled: true
+
+docutools:
+  internal.apiKey: b7abbc58-ef02-4a1f-a85a-e47c4e25b2ce
+  url: https://api.cloud.docu.solutions
+  baseUrl: https://cloud.docu.solutions
+  maestroUrl: https://maestro.cloud.docu.solutions
+  mail.enabled: true
+  services:
+    projects: http://projects:8080
+    previews: http://media-processor:8080
+  security:
+    jwt:
+      keystore.resource: prod.jks
+      keystore.keyname: jwt
+  storage:
+    scheme: S3
+    s3:
+      public: false
+      buckets:
+        misc: docutools-prod-misc
+        temporary: docutools-prod-temporary
+  testPeriodExpiryEmails: true
+  notificationAfter48Hours: true
+  encoding:
+      service:
+        url: https://b8tafbl7e1.execute-api.eu-central-1.amazonaws.com/prod/v1/encoding
+  errors:
+    sentry:
+      enabled: true
+      dsn: https://c0cc6d75e8894ae68470f02dbddf42b3:d49729f6ee3b4851ad23687f74e24cdb@sentry.io/1408951

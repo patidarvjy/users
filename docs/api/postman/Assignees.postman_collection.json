@@ -1,0 +1,84 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Assignees",
+		"_postman_id": "75052cbb-8371-080b-342d-29b97dad28b8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List All Assignees",
+			"request": {
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/projects{{projectId}}/assigness/all?company={{organisationId}}",
+					"auth": {},
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects{{projectId}}",
+						"assigness",
+						"all"
+					],
+					"query": [
+						{
+							"key": "company",
+							"value": "{{organisationId}}",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List All Companies",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/projects{{projectId}}/companies/all",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List Crafts",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/projects{{projectId}}/crafts/all",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

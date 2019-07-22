@@ -1,0 +1,1 @@
+alter table team_memberships add column last_modified timestamp, add column last_modified_by uuid;

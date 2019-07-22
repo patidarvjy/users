@@ -1,0 +1,192 @@
+[
+  {
+    "languageNameMap": {
+      "de": "Administrator",
+      "en": "Project Admin"
+    },
+    "roleType": "PowerUser",
+    "privileges": [
+      "ViewProjectSettings",
+      "ManageProjectSettings",
+
+      "ViewTeam",
+      "CreateTeamMembers",
+      "ManageTeam",
+
+      "CreatePlans",
+      "ManagePlans",
+
+      "ViewPins",
+      "CreatePins",
+      "ManagePins",
+
+      "ViewTasks",
+      "CreateTasks",
+      "ManageTasks",
+
+      "ViewTaskDependencies",
+      "CloseTasks",
+      "DelegateTasks",
+
+      "ViewComments",
+      "CreateComments",
+      "ManageComments",
+
+      "ViewMedia",
+      "CreateMedia",
+      "ManageMedia",
+
+      "ViewPhotos",
+      "CreatePhotos",
+
+      "ViewVideos",
+      "CreateVideos",
+
+      "ViewAudios",
+      "CreateAudios",
+
+      "ViewSketches",
+      "CreateSketches",
+
+      "ViewText",
+      "CreateText",
+
+      "ViewHistory",
+
+      "ViewDatasets",
+      "CreateDatasets",
+      "ManageDatasets",
+
+      "ViewGroups",
+      "CreateGroups",
+      "ManageGroups",
+
+      "ViewReports",
+      "CreateReports",
+      "ManageReports"
+    ]
+  },
+  {
+    "languageNameMap": {
+      "de": "Assistent",
+      "en": "Contributor"
+    },
+    "roleType": "Assistant",
+    "privileges": [
+      "ViewProjectSettings",
+
+      "ViewTeam",
+      "CreateTeamMembers",
+
+      "ViewPins",
+      "CreatePins",
+
+      "ViewTasks",
+      "CreateTasks",
+      "DelegateTasks",
+
+      "ViewComments",
+      "CreateComments",
+      "ManageComments",
+
+      "ViewMedia",
+      "CreateMedia",
+
+      "ViewHistory",
+
+      "ViewDatasets",
+
+      "ViewGroups",
+      "CreateGroups",
+
+      "ViewReports",
+      "CreateReports",
+
+      "RejectTasks"
+    ]
+  },
+  {
+    "languageNameMap": {
+      "de": "Interner Betrachter",
+      "en": "Internal visitor"
+    },
+    "roleType": "Viewer",
+    "privileges": [
+      "ViewProjectSettings",
+
+      "ViewTeam",
+
+      "ViewPins",
+
+      "ViewComments",
+
+      "ViewMedia",
+
+      "ViewHistory",
+
+      "ViewDatasets",
+
+      "ViewGroups",
+
+      "ViewTasks"
+    ]
+  },
+  {
+    "languageNameMap": {
+      "de": "Externer Betrachter",
+      "en": "External visitor"
+    },
+    "roleType": "ExternalVisitor",
+    "privileges": [
+      "CreatePins",
+
+      "CreateTasks",
+
+      "ViewDatasets",
+
+      "ViewComments",
+      "CreateComments",
+
+      "ViewMedia",
+      "CreateMedia",
+
+      "CreateReports",
+
+      "RejectTasks",
+      "CreateGroups"
+    ]
+  },
+  {
+    "languageNameMap": {
+      "de": "Externer Kommentator",
+      "en": "External commentator"
+    },
+    "roleType": "ExternalCommentator",
+    "active": false,
+    "privileges": [
+      "CreatePins",
+
+      "ViewComments",
+      "CreateComments",
+
+      "ViewMedia",
+      "CreateMedia"
+    ]
+  },
+  {
+    "languageNameMap": {
+      "de": "Subunternehmer",
+      "en": "Subcontractor"
+    },
+    "roleType": "SubContractor",
+    "privileges": [
+      "ViewComments",
+      "CreateComments",
+
+      "ViewMedia",
+      "CreateMedia",
+
+      "CreateReports"
+    ]
+  }
+]

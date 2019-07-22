@@ -1,0 +1,17 @@
+INSERT INTO email_templates VALUES
+('97cef5c7-0cdc-46ea-a54f-5d70d680b15c'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'ForgotPassword', true, 'en'),
+('997b72d9-7eb0-4d38-bb78-9bfbd9af21be'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'ForgotPassword', true, 'de'),
+('055028ce-390a-466c-b084-8745196e0b74'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'Register', true, 'en'),
+('36f352d8-1813-40b3-8c1b-794cf2b49fef'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'Register', true, 'de'),
+('6fedf67f-c100-4ae6-adbf-60095b720f6e'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'EndTestPhase', true, 'en'),
+('52ef03db-3870-4683-89a6-34c52421343e'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'EndTestPhase', true, 'de'),
+('c0df4b11-2ec8-44be-a10c-59d5761d5eb5'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'Invitation', true, 'en'),
+('20e39f4f-1aaa-4025-97d2-5e7fa45aacc0'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'Invitation', true, 'de'),
+('5a38c9e7-2371-4247-8ca9-7fb1157f8770'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'ChangeEmail', true, 'en'),
+('179bfd6f-e9be-48d3-a8b9-fec05a0be4f7'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'ChangeEmail', true, 'de'),
+('75390aef-fc57-4062-82a3-3794875ff4a6'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'InviteToProject', true, 'en'),
+('00b48fa8-53d6-472c-aa06-e94bc8b2be1b'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'InviteToProject', true, 'de'),
+('e2bb44f8-fefc-4f70-92d0-07a104899320'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'TokenExpired', true, 'en'),
+('ec182a91-614b-434e-9af7-18f74c5639f0'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'TokenExpired', true, 'de'),
+('414b5b76-8957-419b-a591-ec48f8eb159d'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'PersonalNotificationAfter48Hours', true, 'en'),
+('db8a5432-072a-4990-9e94-348c0406b6c3'::uuid, '00000000-0000-0000-0000-000000000000'::uuid, 'PersonalNotificationAfter48Hours', true, 'de');

@@ -1,0 +1,1 @@
+ALTER TABLE "docutools_users" ADD COLUMN "verification_password_reset" boolean NOT NULL DEFAULT FALSE;

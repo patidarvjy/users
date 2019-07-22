@@ -1,0 +1,1 @@
+ALTER TABLE profile_pic ADD COLUMN thumbnail bytea;

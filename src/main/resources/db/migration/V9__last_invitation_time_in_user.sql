@@ -1,0 +1,1 @@
+ALTER TABLE docutools_users ADD COLUMN last_invitation_time timestamp;

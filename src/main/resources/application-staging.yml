@@ -1,0 +1,45 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    #Disable JPA (Hibernate)'s feature detection to prevent warning "java.sql.SQLFeatureNotSupportedException:
+    #Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented" on start up
+    properties.hibernate.temp.use_jdbc_metadata_defaults: false
+  flyway:
+    enabled: true
+
+docutools:
+  internal.apiKey: b7abbc58-ef02-4a1f-a85a-e47c4e25b2ce
+  url: https://dev.docu-tools.com
+  baseUrl: https://www.dev.docu-tools.com
+  maestroUrl: https://dev.docu-tools.com/maestro
+  storage:
+    scheme: S3
+    s3:
+      buckets:
+        misc: docutools-staging-misc
+        temporary: docutools-stage-temporary
+  mail.enabled: true
+  notificationAfter48Hours: true
+  aws:
+    cognito:
+      identity_pool_name: docutool_cognito2
+      identity_pool_id: 'eu-central-1:b90ca05a-2164-4bd0-a9d8-b976d18f17b7'
+      developer_provider_name: login.docutools
+      token_expiry_time: 300
+  encoding:
+      service:
+        url: https://21z5ax8482.execute-api.eu-central-1.amazonaws.com/dev/v1/encoding
+  errors:
+    sentry:
+      enabled: true
+      dsn: https://c0cc6d75e8894ae68470f02dbddf42b3:d49729f6ee3b4851ad23687f74e24cdb@sentry.io/1408951
+  chargebee:
+    site-name: docu-tools-test
+    api-key-path: /chargebee/api.key
+    enabled: true
+
+
+logging:
+  level:
+    com.docutools: DEBUG

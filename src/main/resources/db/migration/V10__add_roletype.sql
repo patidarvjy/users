@@ -1,0 +1,1 @@
+ALTER TABLE roles ADD COLUMN role_type text DEFAULT 'Custom';

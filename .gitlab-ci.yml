@@ -1,0 +1,145 @@
+image: openjdk:8
+
+before_script:
+- export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  key: users
+#  untracked: true
+  paths:
+  - .gradle/wrapper
+  - .gradle/caches
+
+stages:
+- build
+- verify
+- dockerize
+- deploy
+- notify
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_DRIVER: overlay
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ""
+
+build:
+  stage: build
+  script:
+  - ./gradlew bootJar
+  artifacts:
+    paths:
+    - build/libs/*
+    - build/classes/*
+
+check:
+  stage: verify
+  script:
+  - ls build/
+  - ./gradlew compileJava sonarqube -Dsonar.host.url=https://sonarqube.docu-tools.com -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.sources=src/main/groovy -Dsonar.tests=src/test/groovy -Dsonar.java.binaries=build/classes -x test --stacktrace
+
+#test:
+#  stage: verify
+#  services:
+#  - postgres:latest
+#  script:
+#  - ./gradlew test
+
+dockerize_staging:
+  stage: dockerize
+  services:
+  - docker:dind
+  cache: {}
+  variables:
+    SLACK_WEBHOOK: https://hooks.slack.com/services/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
+  image: docker:latest
+  script:
+  - 'which ssh-agent || ( apk add openssh-client )' # Install ssh-agent if not already installed, it is required by Docker.
+  - eval $(ssh-agent -s) # Run ssh-agent (inside the build environment)
+  ##
+  ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  ## We're using tr to fix line endings which makes ed25519 keys work
+  ## without extra base64 encoding.
+  ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+  ##
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh # Create the SSH directory and give it the right permissions
+  - chmod 700 ~/.ssh
+  - apk add curl
+  - docker build --build-arg JAR_FILE=build/libs/users-api-v2.jar -t registry.gitlab.com/docu-tools/users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID .
+  - docker login registry.gitlab.com/docu-tools/users -u gitlab-ci-token -p $CI_BUILD_TOKEN
+  - docker push registry.gitlab.com/docu-tools/users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID
+  only:
+  - staging
+
+deploy_k8_staging:
+  image: lwolf/helm-kubectl-docker:v152_213
+  stage: deploy
+  cache: {}
+  variables:
+    SLACK_WEBHOOK: https://hooks.slack.com/services/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
+  before_script:
+  - helm init --client-only
+  - helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+  - helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+  - helm repo update
+  script:
+  - helm upgrade --install --namespace=docu-tools-staging --set image=registry.gitlab.com/docu-tools/users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID,sentryrelease=$CI_PIPELINE_IID users ./chart
+  only:
+  - staging
+
+dockerize-prod:
+  stage: dockerize
+  services:
+  - docker:dind
+  cache: {}
+  image: docker:latest
+  script:
+  - docker build --build-arg JAR_FILE=build/libs/users-api-v2.jar -t registry.gitlab.com/docu-tools/users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID .
+  - docker login registry.gitlab.com/docu-tools/users -u gitlab-ci-token -p $CI_BUILD_TOKEN
+  - docker push registry.gitlab.com/docu-tools/users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID
+  only:
+  - production
+
+deploy-prod:
+  stage: deploy
+  services:
+  - docker:dind
+  cache: {}
+  image: docker:latest
+  script:
+  - 'which ssh-agent || ( apk add openssh-client )' # Install ssh-agent if not already installed, it is required by Docker.
+  - eval $(ssh-agent -s) # Run ssh-agent (inside the build environment)
+  - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh # Create the SSH directory and give it the right permissions
+  - chmod 700 ~/.ssh
+  - ssh -oStrictHostKeyChecking=no gocd@cloud.master.docu.solutions docker service update --image registry.gitlab.com/docu-tools/users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID --env-add SENTRY_RELEASE=$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID --with-registry-auth --update-failure-action rollback --update-order start-first --update-monitor 120s users
+  when: manual
+  only:
+  - production
+
+
+notify_success:
+  stage: notify
+  cache: {}
+  variables:
+    SLACK_WEBHOOK: https://hooks.slack.com/services/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
+  script:
+  - 'curl --data "{ \"title\":\" Users Deployed!\", \"text\": \" A new version of Users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID - successfully deployed :thumbsup: \" }" $SLACK_WEBHOOK'
+  when: on_success
+  only:
+  - staging
+  - production
+
+notify_failure:
+  stage: notify
+  cache: {}
+  variables:
+    SLACK_WEBHOOK: https://hooks.slack.com/services/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
+  script:
+  - 'curl --data "{ \"title\":\" Users failed!\", \"text\": \" :crying_cat_face: :crying_cat_face: :crying_cat_face: Deployment of Users:$CI_COMMIT_REF_NAME-$CI_PIPELINE_IID - failed\" }" $SLACK_WEBHOOK'
+  when: on_failure
+  only:
+  - staging
+  - production

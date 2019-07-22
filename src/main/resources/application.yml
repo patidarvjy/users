@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      poolName: users-service-pool
+      leakDetectionThreshold: 300000
+      maximumPoolSize: 20
+      idleTimeout: 300000
+      maxLifetime: 600000
+      connectionTimeout: 60000
+  servlet:
+    multipart:
+      maxFileSize: 10240MB
+      maxRequestSize: 10240MB
+  application.name: users-service
+
+docutools:
+  maestroUrl: http://localhost:8080/landing
+  security:
+      passwords:
+        pbkdf2:
+          secret: yXD6Z9sV
+  saml:
+    keyResource: saml/public_key.pem
+  mail:
+    from: service@cloud.docu.solutions
+    links:
+      invite: /activate/invited
+      register: /activate/registered
+      forgotPassword: /activate/forgotPassword
+      changeEmail: /home/verifyEmail
+      help: https://docu-tools.zendesk.com/hc/de
+  sustainOrganization :
+    name: Sustain Organiztion
+    id: edaafcd8-a1de-11e7-abc4-cec278b6b50a
+    cc: cc
+
+
+springfox.documentation.swagger.v2.path: /users/api-docs

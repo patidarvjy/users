@@ -1,0 +1,127 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Team",
+		"_postman_id": "2b923253-1702-2ad4-bacb-eaf196d63721",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List User's Project/Roles Matrix",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/users/{{userId}}/projects",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "List Project's Team",
+			"request": {
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/projects/{{projectId}}/team?quickFilter=All",
+					"auth": {},
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects",
+						"{{projectId}}",
+						"team"
+					],
+					"query": [
+						{
+							"key": "quickFilter",
+							"value": "All",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Member",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/projects/{{projectId}}/team",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userId\": \"{{userId}}\",\n\t\"roleIds\": [],\n\t\"state\": \"Inactive\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update Member",
+			"request": {
+				"url": "{{baseUrl}}/api/v1/projects/{{projectId}}/team/{{userId}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"roleIds\": [],\n\t\"state\": \"Inactive\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

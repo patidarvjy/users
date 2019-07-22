@@ -1,0 +1,1 @@
+ALTER TABLE team_memberships ADD COLUMN role_id uuid REFERENCES roles(id);
